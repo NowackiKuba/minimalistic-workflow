@@ -2,7 +2,6 @@
 name: mw-debug
 description: Fix a bug by reproducing it with a failing test first, then finding the root cause and fixing it. Use whenever the user reports a bug, error, crash, regression, failing behaviour or Sentry issue, or says "this is broken", "we have a bug", "fix this", "it keeps failing". Bug flow of the Minimalistic Workflow; replaces grill/split/plan/build for bugs.
 model: opus
-disable-model-invocation: true
 ---
 
 # mw-debug

@@ -2,7 +2,6 @@
 name: mw-split
 description: Split a grilled feature summary into small local tickets in tickets/. Use whenever the user wants to break a feature, grill summary or scope into tickets or tasks, or says "split this into tickets", "break it down", "make tasks from this". Runs after mw-grill in the Minimalistic Workflow.
 model: sonnet
-disable-model-invocation: true
 ---
 
 # mw-split

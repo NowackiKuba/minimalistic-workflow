@@ -3,6 +3,7 @@ name: mw-commit
 description: Create small, logical conventional commits for the current changes, with messages that explain why. Use whenever the user says "commit", "commit this", "make commits", or when changes are ready to commit after review. Part of the Minimalistic Workflow.
 model: haiku
 disable-model-invocation: true
+allowed-tools: Bash(git *)
 ---
 
 # mw-commit

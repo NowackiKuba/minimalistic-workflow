@@ -2,7 +2,6 @@
 name: mw-grill
 description: Grill a feature idea or requirement until nothing is ambiguous, grounded in the project's docs and code. Use whenever the user wants to discuss, clarify, scope, stress-test or grill a feature, change or idea before building it, or says things like "let's grill this", "let's scope this feature", "let's talk this through before we start". First step of the Minimalistic Workflow feature flow.
 model: opus
-disable-model-invocation: true
 ---
 
 # mw-grill

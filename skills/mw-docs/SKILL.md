@@ -2,7 +2,6 @@
 name: mw-docs
 description: Update project documentation that a change has made outdated. Use after a feature is reviewed, whenever the user says "update the docs", "sync docs", or when a change touches architecture, conventions, modules, APIs, env vars, commands or anything listed in the CLAUDE.md docs map. Part of the Minimalistic Workflow; the workflow depends on docs staying true.
 model: sonnet
-disable-model-invocation: true
 ---
 
 # mw-docs

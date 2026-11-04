@@ -2,7 +2,6 @@
 name: mw-plan
 description: Write an implementation plan for a ticket and stop for human approval before any code is written. Use whenever the user wants to plan a ticket, task or change, says "plan this", "make a plan", "how should we do this", or is about to start implementing a ticket from tickets/. Runs before mw-build in the Minimalistic Workflow.
 model: opus
-disable-model-invocation: true
 ---
 
 # mw-plan

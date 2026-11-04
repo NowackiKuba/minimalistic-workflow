@@ -2,7 +2,6 @@
 name: mw-build
 description: Implement an approved plan from .mw/plans/, following the project's architecture and conventions, and loop on tests, typecheck and lint until they pass. Use whenever the user approves a plan, says "go", "build it", "implement it", "approved, do it", or asks to implement a ticket that has an approved plan. Runs after mw-plan in the Minimalistic Workflow.
 model: opus
-disable-model-invocation: true
 ---
 
 # mw-build
