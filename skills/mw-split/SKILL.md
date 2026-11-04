@@ -8,9 +8,23 @@ model: sonnet
 
 Turn an agreed scope into tickets that can each be planned, built and reviewed on their own.
 
+## Core principle (think mode)
+
+The user produces the first version of every decision (scope, split, plan, hypothesis, review findings). You critique it, ask questions and execute. Never present your own full solution first. Reveal your own version only after the user's version exists, or when the user explicitly asks for it.
+
 ## Input
 
 The grill summary in `.mw/grill/<slug>.md`. If there is none, ask the user to run `mw-grill` first or to paste the agreed scope. Do not invent scope.
+
+Use the mode recorded in the summary. If none is recorded, ask once: "think or ship?" Copy the mode into every ticket.
+
+## Think mode: the user splits first
+
+1. Ask the user to propose the split: ticket titles, order and dependencies. Wait for it.
+2. Critique it against the rules in "How to split": tickets that are too large, hidden dependencies, missing tickets, wrong order. Raise each point as a question or a short remark. Do not rewrite the split unless the user asks.
+3. When the user confirms their split, write the ticket files.
+
+In ship mode, you propose the split yourself, as described below.
 
 ## How to split
 
@@ -28,6 +42,7 @@ Number tickets after the highest existing number in `tickets/`. File: `tickets/N
 # NNN: <title>
 
 **Feature:** <grill slug>
+**Mode:** think | ship
 **Size:** S | M
 **Depends on:** NNN, NNN | none
 

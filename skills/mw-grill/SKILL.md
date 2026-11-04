@@ -8,7 +8,34 @@ model: opus
 
 Turn a rough idea into a clear, agreed scope before any ticket or code exists. Questions are cheap now and expensive after implementation.
 
-## 1. Read first, ask second
+## Core principle (think mode)
+
+The user produces the first version of every decision (scope, split, plan, hypothesis, review findings). You critique it, ask questions and execute. Never present your own full solution first. Reveal your own version only after the user's version exists, or when the user explicitly asks for it.
+
+## 0. Mode
+
+If the user did not say, ask once: "think or ship?"
+
+- **think** (default for non-trivial work): the user writes first; the think-mode rules below apply.
+- **ship** (routine work: small fixes, renames, boilerplate): you drive the questions and draft the summary; the user approves.
+
+Record the mode in the summary so later steps follow it.
+
+## 1. The user writes first (think mode)
+
+Ask the user to write their own understanding of the feature:
+
+- **Goal:** who is it for, what problem, how will we know it works
+- **Scope:** what is in
+- **Out of scope**
+- **Edge cases**
+- **Risks**
+
+Wait for it. Do not suggest content for any of these points before the user's text exists.
+
+In ship mode, skip this step.
+
+## 2. Read first, ask second
 
 Before the first question:
 
@@ -18,7 +45,7 @@ Before the first question:
 
 Do not ask anything the docs or code already answer. Asking it wastes the user's time and signals you did not read.
 
-## 2. Grill
+## 3. Grill
 
 Ask 1–3 questions at a time, most important first. Cover, as relevant:
 
@@ -31,16 +58,20 @@ Ask 1–3 questions at a time, most important first. Cover, as relevant:
 - **Non-functional:** performance, concurrency, idempotency, retries
 - **Dependencies:** other teams, services, tickets
 
+**Think mode:** use the list above to find gaps, not as a script. Ask only about gaps, contradictions and risks in the user's text, checked against the docs and code. Ask questions; do not suggest answers. If the user is stuck, give a hint (a scenario to consider, a file to look at), not the answer.
+
 When an answer is vague, push back with a concrete scenario ("what happens if two users do X at once?"). When you disagree with a decision, say so once with the reason, then accept the user's call.
 
 Stop when every point above is either answered or consciously deferred.
 
-## 3. Summary
+## 4. Summary
 
-Write the summary to `.mw/grill/<slug>.md` and show it to the user for confirmation:
+Write the summary to `.mw/grill/<slug>.md` and show it to the user for confirmation. In think mode, the summary records the user's decisions, not yours.
 
 ```markdown
 # <Feature name>
+
+**Mode:** think | ship
 
 ## Goal
 
