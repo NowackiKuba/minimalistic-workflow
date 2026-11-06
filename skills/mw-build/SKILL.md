@@ -50,6 +50,8 @@ After the checks are green, ask the user 2–3 specific questions about the code
 
 When green, report: files changed, tests added, any approved deviation, a summary of the verification output, and every `TODO [human]` left for the user (file, plan section, what to write).
 
+Never stage or commit. Leave every change uncommitted in the working tree: `mw-review` reviews uncommitted changes (`git diff HEAD`) by default, and committing is `mw-commit`'s job after review.
+
 Next step: `mw-review` in a fresh session.
 
 ## Metrics

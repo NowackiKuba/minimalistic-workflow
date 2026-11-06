@@ -51,6 +51,8 @@ Record the mode in the report.
 ## Same cause elsewhere?
 ```
 
+Never stage or commit. Leave every change uncommitted in the working tree: `mw-review` reviews uncommitted changes (`git diff HEAD`) by default, and committing is `mw-commit`'s job after review.
+
 Next step: `mw-review` in a fresh session.
 
 ## Metrics
