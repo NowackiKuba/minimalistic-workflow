@@ -64,4 +64,4 @@ Then add the sections from `templates/CLAUDE.md` to your project's `CLAUDE.md`.
 2. A human approves the plan before code is written. Fixing a plan is cheaper than fixing code.
 3. Nothing is "done" while tests, typecheck or lint are red.
 4. Review happens in a fresh session, so the reviewer does not share the author's assumptions.
-5. Every step logs one metrics line, so you can tell whether the workflow actually helps.
+5. Every step logs one metrics line, so you can tell whether the workflow actually helps. `mw-commit` and `mw-pr` commit and push `.mw/metrics.jsonl` on their own, without asking.
