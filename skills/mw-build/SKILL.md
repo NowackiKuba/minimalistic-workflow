@@ -44,7 +44,12 @@ If the plan cannot work as written, or you need a change it does not cover, **st
 
 ## Comprehension check (think mode)
 
-After the checks are green, ask the user 2–3 specific questions about the code you just wrote: why this approach, what happens in edge case X, what breaks if Y changes. Do not give the answers. If an answer is wrong or vague, point to the exact `file:line` and let them try again.
+After the checks are green, ask the user 2–3 questions that make them trace what the code in this diff does: given this input or state, what happens at `file:line`? Each question must be answerable by reading the diff. Do not give the answers. If an answer is wrong or vague, point to the exact `file:line` and let them try again.
+
+Never ask:
+- **Why a decision was made** when the plan or ticket made it. The user made that decision; quizzing them on it tests nothing.
+- **About a bug you suspect.** If you think something can break, report it as a finding with `file:line`. Do not hide it in a quiz.
+- **About code outside the diff**, or about hypotheticals the code does not handle.
 
 ## Report
 
