@@ -24,5 +24,5 @@ lint:      <e.g. pnpm lint>
 ## Workflow
 
 This project uses Minimalistic Workflow.
-Feature: mw-grill → mw-split → mw-plan → mw-build → mw-review → mw-docs → mw-commit → mw-pr
-Bug: mw-debug → mw-review → mw-commit → mw-pr
+Feature: mw-grill → mw-split → mw-plan → mw-build → mw-review → mw-docs → mw-commit → mw-pr → mw-wid
+Bug: mw-debug → mw-review → mw-commit → mw-pr → mw-wid

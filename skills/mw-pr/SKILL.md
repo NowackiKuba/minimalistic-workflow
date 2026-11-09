@@ -1,6 +1,6 @@
 ---
 name: mw-pr
-description: Write a pull request description from the project's PR template, based on the ticket, plan, review and diff. Use whenever the user says "open a PR", "write the PR description", "pull request", or when commits are ready to open a PR. Last step of the Minimalistic Workflow.
+description: Write a pull request description from the project's PR template, based on the ticket, plan, review and diff. Use whenever the user says "open a PR", "write the PR description", "pull request", or when commits are ready to open a PR. Runs before mw-wid in the Minimalistic Workflow.
 model: haiku
 disable-model-invocation: true
 ---
@@ -21,6 +21,8 @@ A PR description lets the reviewer understand the change before reading the code
 4. Do not describe what the diff already shows line by line. Do not claim tests or checks that were not run.
 5. Append this step's metrics line (see Metrics).
 6. Show the description. Only open the PR (e.g. `gh pr create`) if the user asks.
+
+Next step: `mw-wid`.
 
 ## Default template
 

@@ -4,9 +4,9 @@ A small set of Claude Code skills for shipping features and fixing bugs end to e
 
 ## Flows
 
-**Feature:** `mw-grill` → `mw-split` → `mw-plan` → `mw-build` → `mw-review` → `mw-docs` → `mw-commit` → `mw-pr`
+**Feature:** `mw-grill` → `mw-split` → `mw-plan` → `mw-build` → `mw-review` → `mw-docs` → `mw-commit` → `mw-pr` → `mw-wid`
 
-**Bug:** `mw-debug` → `mw-review` → `mw-commit` → `mw-pr`
+**Bug:** `mw-debug` → `mw-review` → `mw-commit` → `mw-pr` → `mw-wid`
 
 | Skill | Does |
 |---|---|
@@ -19,6 +19,7 @@ A small set of Claude Code skills for shipping features and fixing bugs end to e
 | `mw-docs` | Updates docs the change made stale |
 | `mw-commit` | Small, logical conventional commits |
 | `mw-pr` | PR description from the project's PR template |
+| `mw-wid` | Short "what I did" note in your Obsidian vault, one folder per project |
 
 ## Core principle
 
