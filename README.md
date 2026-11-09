@@ -46,7 +46,7 @@ CLAUDE.md                 # project map: docs, commands (see templates/CLAUDE.md
 tickets/NNN-slug.md       # local tickets (mw-split)
 .mw/grill/<slug>.md       # grill summaries (mw-grill)
 .mw/plans/NNN-slug.md     # approved plans (mw-plan)
-.mw/metrics.jsonl         # one line per step, for measuring the workflow
+.mw/metrics.jsonl         # one line per step, for measuring the workflow (gitignored)
 ```
 
 ## Install
@@ -64,4 +64,4 @@ Then add the sections from `templates/CLAUDE.md` to your project's `CLAUDE.md`.
 2. A human approves the plan before code is written. Fixing a plan is cheaper than fixing code.
 3. Nothing is "done" while tests, typecheck or lint are red.
 4. Review happens in a fresh session, so the reviewer does not share the author's assumptions.
-5. Every step logs one metrics line, so you can tell whether the workflow actually helps. `mw-commit` and `mw-pr` commit and push `.mw/metrics.jsonl` on their own, without asking.
+5. Every step logs one metrics line, so you can tell whether the workflow actually helps. `.mw/metrics.jsonl` stays local: it belongs in `.gitignore`, and the steps that log metrics ask you to add it when it is missing.

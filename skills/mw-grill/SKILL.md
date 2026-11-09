@@ -100,5 +100,7 @@ Next step: `mw-split`.
 
 ## Metrics
 
+`.mw/metrics.jsonl` stays local and is never committed. Before appending, run `git check-ignore -q .mw/metrics.jsonl`. If it exits non-zero, the file is not ignored: tell the user and ask to add `.mw/metrics.jsonl` to `.gitignore`. If they agree, add it, and run `git rm --cached .mw/metrics.jsonl` if the file is already tracked. If they decline, append anyway and ask again next run.
+
 Append one line to `.mw/metrics.jsonl`:
 `{"step":"grill","slug":"<slug>","date":"<ISO date>","questions":<number asked>,"rounds":<rounds>}`

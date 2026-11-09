@@ -19,7 +19,7 @@ A PR description lets the reviewer understand the change before reading the code
    - Risks, migrations, config or env changes, breaking changes
    - Anything the reviewer should look at closely
 4. Do not describe what the diff already shows line by line. Do not claim tests or checks that were not run.
-5. Append this step's metrics line (see Metrics), then commit and push the metrics without asking: `git add .mw/metrics.jsonl`, `git commit -m "chore(metrics): log workflow metrics"`, `git push` (`git push -u origin HEAD` if the branch has no upstream). Commit nothing else. If the current branch is the default branch, commit but do not push, and say so.
+5. Append this step's metrics line (see Metrics).
 6. Show the description. Only open the PR (e.g. `gh pr create`) if the user asks.
 
 ## Default template
@@ -44,6 +44,8 @@ Refs: <ticket>
 ```
 
 ## Metrics
+
+`.mw/metrics.jsonl` stays local and is never committed. Before appending, run `git check-ignore -q .mw/metrics.jsonl`. If it exits non-zero, the file is not ignored: tell the user and ask to add `.mw/metrics.jsonl` to `.gitignore`. If they agree, add it, and run `git rm --cached .mw/metrics.jsonl` if the file is already tracked. If they decline, append anyway and ask again next run.
 
 Append one line to `.mw/metrics.jsonl`:
 `{"step":"pr","ticket":"NNN","date":"<ISO date>"}`
