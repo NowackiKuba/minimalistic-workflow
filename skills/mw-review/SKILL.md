@@ -2,6 +2,7 @@
 name: mw-review
 description: Review a diff (current changes by default, or a given branch, commit or range) against its ticket, plan, architecture and conventions, scaling the review to the size and risk of the change by spawning reviewer subagents. Use whenever the user asks for a code review, "review this", "check the diff", "review branch X", "review commit abc123", or after mw-build or mw-debug finishes. Best run in a fresh session. Part of the Minimalistic Workflow.
 model: opus
+disable-model-invocation: true
 ---
 
 # mw-review
@@ -34,6 +35,8 @@ If the diff is empty, say so in one line and stop.
 
 Use the mode recorded in the plan, ticket or debug report. If none is recorded, ask once: "think or ship?"
 
+**Manual check.** If the ticket has a `## How to verify` section, ask the user whether they completed those steps before running any reviewer. If not, list the steps and wait until they confirm.
+
 ## 3. The user reviews first (think mode)
 
 Before running any reviewer, ask the user for their own findings on the diff, one per line: `file:line — what — why`. "None" is a valid answer. Wait for it. Do not hint at problems before you have it.
@@ -44,7 +47,7 @@ Do not pass the user's findings to the reviewer subagents; they review independe
 
 Count changed lines (added + removed, excluding lockfiles, generated files and snapshots) and files.
 
-**Sensitive** if the diff touches any of: auth/permissions, payments, migrations or schema, public API contracts, security config, infra/deploy, queues/jobs with retries, cryptography, PII handling.
+**Sensitive** if the diff touches any of the "Sensitive areas" list in `~/minimalistic-workflow/README.md`.
 
 | Size | When                                  | Reviewers                                                                                                             |
 | ---- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -66,7 +69,7 @@ Run subagents in parallel. For size S, apply the same rules yourself across all 
 
 - Deduplicate overlapping findings.
 - Check every finding against the code yourself. Drop anything you cannot confirm.
-- Run tests, typecheck and lint. Do not trust earlier reports.
+- Run tests, typecheck and lint through `mw-run` (`mw-run test -- <test command>`, and so on). Do not trust earlier reports. Rerun a single failing test with full output only when the compact output is not enough to diagnose it.
 - Classify: **blocker** = bug, security issue, data risk, broken acceptance criterion, plan violation. Everything else is a **suggestion**.
 - **Think mode:** check every user finding against the code the same way. Match the user's findings to the verified ones: a verified finding the user reported is **found**, one they did not report is **missed**, and a user finding that is not a real problem is a **false alarm**.
 
@@ -105,6 +108,6 @@ Omit an empty section. If there are no findings at all, output the first line an
 
 ## Metrics
 
-`{"step":"review","ticket":"NNN","date":"<ISO date>","size":"S|M|L","blockers":<count>,"suggestions":<count>,"user_found":<count>,"user_missed":<count>}`
+`{"step":"review","ticket":"NNN","date":"<ISO date>","mode":"think|ship","blockers":<count>,"user_found":<count>,"user_missed":<count>}`
 
 In ship mode, omit `user_found` and `user_missed`.

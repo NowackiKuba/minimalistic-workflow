@@ -2,6 +2,7 @@
 name: mw-grill
 description: Grill a feature idea or requirement until nothing is ambiguous, grounded in the project's docs and code. Use whenever the user wants to discuss, clarify, scope, stress-test or grill a feature, change or idea before building it, or says things like "let's grill this", "let's scope this feature", "let's talk this through before we start". First step of the Minimalistic Workflow feature flow.
 model: opus
+disable-model-invocation: true
 ---
 
 # mw-grill
@@ -14,10 +15,17 @@ The user produces the first version of every decision (scope, split, plan, hypot
 
 ## 0. Mode
 
-If the user did not say, ask once: "think or ship?"
+If the user did not say, propose a mode with a one-sentence reason and let them confirm or override it:
 
-- **think** (default for non-trivial work): the user writes first; the think-mode rules below apply.
-- **ship** (routine work: small fixes, renames, boilerplate): you drive the questions and draft the summary; the user approves.
+- **think** if the change touches any of the "Sensitive areas" list in `~/minimalistic-workflow/README.md`; or touches paths you have not changed in the last ~3 months (`git log --author="$(git config user.email)" --since=3.months --oneline -- <affected paths>` prints nothing); or involves a design decision that is hard to reverse.
+- **ship** otherwise.
+
+Example: `Proposed mode: think — touches migrations and queue retries. OK?` Accept a one-word reply: `ok` keeps the proposal, `think` or `ship` overrides it.
+
+What the modes mean here:
+
+- **think:** the user writes first; the think-mode rules below apply.
+- **ship:** you drive the questions and draft the summary; the user approves.
 
 Record the mode in the summary so later steps follow it.
 
@@ -100,7 +108,7 @@ Next step: `mw-split`.
 
 ## Metrics
 
-`.mw/metrics.jsonl` stays local and is never committed. Before appending, run `git check-ignore -q .mw/metrics.jsonl`. If it exits non-zero, the file is not ignored: tell the user and ask to add `.mw/metrics.jsonl` to `.gitignore`. If they agree, add it, and run `git rm --cached .mw/metrics.jsonl` if the file is already tracked. If they decline, append anyway and ask again next run.
+`.mw/metrics.jsonl` stays local and is never committed. Before appending, run `git check-ignore -q .mw/metrics.jsonl`. If it exits non-zero, tell the user to run `mw-init` in the project root, then append anyway.
 
 Append one line to `.mw/metrics.jsonl`:
-`{"step":"grill","slug":"<slug>","date":"<ISO date>","questions":<number asked>,"rounds":<rounds>}`
+`{"step":"grill","slug":"<slug>","date":"<ISO date>","mode":"think|ship"}`

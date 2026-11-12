@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Weekly summary of .mw/metrics.jsonl: are plans improving, is review catching more, is think mode used and worth it.
+set -euo pipefail
+
+weeks=${1:-4}
+[[ $weeks =~ ^[1-9][0-9]*$ ]] || { echo "usage: mw-stats [weeks=4]" >&2; exit 2; }
+command -v jq >/dev/null || { echo "mw-stats: needs jq" >&2; exit 1; }
+file=.mw/metrics.jsonl
+[ -f "$file" ] || { echo "mw-stats: no $file in $(pwd)" >&2; exit 1; }
+
+jq -rn --argjson weeks "$weeks" '
+  def week: .[0:10] | strptime("%Y-%m-%d") | mktime | strftime("%G-W%V");
+  def steps($s): map(select(.step == $s));
+  def avg($f): if length == 0 then "-" else (map(.[$f] // 0) | add / length * 10 | round / 10 | tostring) end;
+  def total($f): map(.[$f] // 0) | add // 0;
+  def stops: "\(map(select(.result == "stopped")) | length)/\(length)";
+  def rpad($n): tostring | . + " " * ([$n - length, 0] | max);
+  def lpad($n): tostring | " " * ([$n - length, 0] | max) + .;
+  def row($first; $c): [($first | rpad(9)), ($c[] | lpad(9))] | add;
+
+  [range($weeks - 1; -1; -1) | now - . * 604800 | strftime("%G-W%V")] as $wks
+  | [inputs | select(.date? | type == "string") | . + {week: (.date | week)} | select(.week | IN($wks[]))] as $rows
+  | "mw-stats · last \($weeks) weeks · \($rows | length) lines",
+    "         | Q1 plans                          | Q2 review       | Q3 mode, per plan/debug",
+    row("week"; ["rev/plan", "dev/bld", "att/bld", "stops", "found", "missed", "think", "ship"]),
+    ($wks[] as $w
+      | ($rows | map(select(.week == $w))) as $r
+      | ($r | steps("build")) as $b
+      | ($r | steps("review")) as $rv
+      | ($r | map(select(.step == "plan" or .step == "debug"))) as $u
+      | row($w; [
+          ($r | steps("plan") | avg("revisions")),
+          ($b | avg("deviations")), ($b | avg("attempts")), ($b | stops),
+          ($rv | total("user_found")), ($rv | total("user_missed")),
+          ($u | map(select(.mode == "think")) | length), ($u | map(select(.mode == "ship")) | length)
+        ])),
+    "Q3 worth it? " + ([("think", "ship") as $m
+      | ($rows | map(select(.mode == $m))) as $mr
+      | "\($m): \($mr | steps("review") | avg("blockers")) blockers/review, build stops \($mr | steps("build") | stops)"
+    ] | join(" · "))
+' "$file"

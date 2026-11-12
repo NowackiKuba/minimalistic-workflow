@@ -2,6 +2,7 @@
 name: mw-split
 description: Split a grilled feature summary into small local tickets in tickets/. Use whenever the user wants to break a feature, grill summary or scope into tickets or tasks, or says "split this into tickets", "break it down", "make tasks from this". Runs after mw-grill in the Minimalistic Workflow.
 model: sonnet
+disable-model-invocation: true
 ---
 
 # mw-split
@@ -58,13 +59,13 @@ Number tickets after the highest existing number in `tickets/`. File: `tickets/N
 
 - [ ] ...
 
+## How to verify
+
+<optional: only when the ticket has user-facing behaviour. Numbered manual steps to check the change in the UI or API.>
+
 ## Out of scope
 ```
 
 Show the list (number, title, size, dependencies) and ask for confirmation before writing the files.
 
 Next step: `mw-plan` on the first ticket with no open dependencies.
-
-## Metrics
-
-`{"step":"split","slug":"<slug>","date":"<ISO date>","tickets":<count>}`

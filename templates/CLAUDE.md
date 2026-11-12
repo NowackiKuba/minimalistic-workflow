@@ -15,6 +15,8 @@ Read the docs relevant to a task before planning it. Mark which ones you read.
 
 ## Commands
 
+Raw commands. The workflow skills wrap them with `mw-run` themselves.
+
 ```bash
 test:      <e.g. pnpm test>
 typecheck: <e.g. pnpm tsc --noEmit>
