@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Keep Minimalistic Workflow files out of a team repo via .git/info/exclude (local, never committed).
+set -euo pipefail
+
+usage() { echo "usage: mw-init [--commit-plans]" >&2; exit 2; }
+commit_plans=0
+case "${1:-}" in
+  "") ;;
+  --commit-plans) commit_plans=1 ;;
+  *) usage ;;
+esac
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "mw-init: $(pwd) is not a git repo, nothing to do"
+  exit 0
+fi
+
+exclude=$(git rev-parse --git-path info/exclude)
+mkdir -p "$(dirname "$exclude")"
+touch "$exclude"
+
+if [ "$commit_plans" -eq 1 ]; then
+  # Excluding .mw/ itself would make .mw/plans/ impossible to re-include, so exclude its contents instead.
+  patterns=("tickets/" ".mw/*" "!.mw/plans/")
+  if grep -qxF ".mw/" "$exclude"; then
+    echo "warning: $exclude already has '.mw/', which hides .mw/plans/; remove that line to commit plans"
+  fi
+else
+  patterns=("tickets/" ".mw/")
+fi
+
+for pattern in "${patterns[@]}"; do
+  if grep -qxF -- "$pattern" "$exclude"; then
+    echo "already in $exclude: $pattern"
+  else
+    # Make sure we append on a fresh line.
+    [ -s "$exclude" ] && [ "$(tail -c1 "$exclude")" != "" ] && echo >>"$exclude"
+    echo "$pattern" >>"$exclude"
+    echo "added to $exclude: $pattern"
+  fi
+done
+
+tracked=$(git ls-files -- tickets .mw | wc -l | tr -d ' ')
+if [ "$tracked" -gt 0 ]; then
+  echo "note: $tracked file(s) under tickets/ or .mw/ are already tracked; exclude does not untrack them (git rm --cached)"
+fi

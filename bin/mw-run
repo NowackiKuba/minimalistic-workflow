@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Run a verification command with compact output. Exits with the command's exit code.
+set -u
+
+usage() { echo "usage: mw-run <test|typecheck|lint> -- <command...>" >&2; exit 2; }
+kind=${1:-}
+case "$kind" in test|typecheck|lint) ;; *) usage ;; esac
+shift
+[ "${1:-}" = "--" ] || usage
+shift
+[ $# -gt 0 ] || usage
+
+out=$(mktemp)
+trap 'rm -f "$out"' EXIT
+
+"$@" >"$out" 2>&1
+code=$?
+
+if [ "$code" -eq 0 ]; then
+  echo "ok ($kind)"
+  exit 0
+fi
+
+if [ "$kind" = test ]; then
+  tail -n 40 "$out"
+  echo "failed ($kind, exit $code)"
+else
+  # Errors cascade, so the first ones matter most.
+  # shortcut: matches lines containing the word "error"; tools that print it on a separate line from the file path (eslint stylish) lose the path — use a unix/compact formatter if that bites.
+  pattern='(^|[^[:alnum:]_])error([^[:alnum:]_]|$)'
+  count=$(grep -ciE "$pattern" "$out")
+  if [ "$count" -gt 0 ]; then
+    grep -iE "$pattern" "$out" | head -n 20
+    echo "$count error line(s) in total ($kind, exit $code)"
+  else
+    head -n 20 "$out"
+    echo "no 'error' lines found; showing the first 20 lines ($kind, exit $code)"
+  fi
+fi
+exit "$code"
