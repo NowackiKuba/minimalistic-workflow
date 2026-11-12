@@ -2,6 +2,7 @@
 name: mw-debug
 description: Fix a bug by reproducing it with a failing test first, then finding the root cause and fixing it. Use whenever the user reports a bug, error, crash, regression, failing behaviour or Sentry issue, or says "this is broken", "we have a bug", "fix this", "it keeps failing". Bug flow of the Minimalistic Workflow; replaces grill/split/plan/build for bugs.
 model: opus
+disable-model-invocation: true
 ---
 
 # mw-debug
@@ -14,10 +15,17 @@ The user produces the first version of every decision (scope, split, plan, hypot
 
 ## Mode
 
-If the user did not say, ask once: "think or ship?"
+If the user did not say, propose a mode with a one-sentence reason and let them confirm or override it:
 
-- **think** (default for non-trivial bugs): the user forms the hypothesis and proposes the fix; you guide, critique and implement.
-- **ship** (routine bugs): you investigate and propose; the user approves.
+- **think** if the change touches any of the "Sensitive areas" list in `~/minimalistic-workflow/README.md`; or touches paths you have not changed in the last ~3 months (`git log --author="$(git config user.email)" --since=3.months --oneline -- <affected paths>` prints nothing); or involves a design decision that is hard to reverse.
+- **ship** otherwise.
+
+Example: `Proposed mode: think — touches migrations and queue retries. OK?` Accept a one-word reply: `ok` keeps the proposal, `think` or `ship` overrides it.
+
+What the modes mean here:
+
+- **think:** the user forms the hypothesis and proposes the fix; you guide, critique and implement.
+- **ship:** you investigate and propose; the user approves.
 
 Record the mode in the report.
 
@@ -31,7 +39,7 @@ Record the mode in the report.
 4. **Propose.** Before editing, tell the user in a few lines: root cause, proposed fix, files touched. For a small, obvious fix you may proceed; for anything touching shared code, data or behaviour beyond the bug, wait for approval.
    - **Think mode:** the user proposes the fix. Critique it (does it remove the cause, side effects, same cause elsewhere, missing cases), then implement it once agreed.
 5. **Fix.** Minimal change that removes the cause. Follow architecture and conventions.
-6. **Verify.** Run the reproduction test (now green), then the full test suite, typecheck and lint. Same loop rules as `mw-build`: fix causes, never weaken tests, max 3 attempts, then stop and report.
+6. **Verify.** Run the reproduction test (now green), then the full test suite, typecheck and lint, each through `mw-run` (see `mw-build`). Rerun a single failing test with full output only when the compact output is not enough to diagnose it. Same loop rules as `mw-build`: fix causes, never weaken tests, max 3 attempts, then stop and report.
 
 ## Report
 
@@ -57,4 +65,7 @@ Next step: `mw-review` in a fresh session.
 
 ## Metrics
 
-`{"step":"debug","date":"<ISO date>","reproduced":true|false,"attempts":<verification runs>,"result":"green|stopped"}`
+`.mw/metrics.jsonl` stays local and is never committed. Before appending, run `git check-ignore -q .mw/metrics.jsonl`. If it exits non-zero, tell the user to run `mw-init` in the project root, then append anyway.
+
+Append one line to `.mw/metrics.jsonl`:
+`{"step":"debug","date":"<ISO date>","mode":"think|ship"}`

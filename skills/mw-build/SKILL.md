@@ -1,7 +1,8 @@
 ---
 name: mw-build
 description: Implement an approved plan from .mw/plans/, following the project's architecture and conventions, and loop on tests, typecheck and lint until they pass. Use whenever the user approves a plan, says "go", "build it", "implement it", "approved, do it", or asks to implement a ticket that has an approved plan. Runs after mw-plan in the Minimalistic Workflow.
-model: opus
+model: sonnet
+disable-model-invocation: true
 ---
 
 # mw-build
@@ -16,7 +17,7 @@ The user produces the first version of every decision (scope, split, plan, hypot
 
 1. Read the approved plan in `.mw/plans/NNN-*.md`. If there is no approved plan, stop and suggest `mw-plan`. Use the mode recorded in the plan; if none is recorded, ask once: "think or ship?"
 2. Read the ticket, `CLAUDE.md`, and the architecture and conventions docs.
-3. Find the test, typecheck and lint commands in `CLAUDE.md`. If they are missing, read `package.json` (or equivalent) and ask the user to confirm them.
+3. Find the test, typecheck and lint commands in `CLAUDE.md`. If they are missing, read `package.json` (or equivalent) and ask the user to confirm them. Run every check through `mw-run <test|typecheck|lint> -- <command>` (e.g. `mw-run test -- pnpm test`): it prints `ok (<kind>)` on success and only the useful part of the output on failure.
 
 ## Implement
 
@@ -28,10 +29,10 @@ The user produces the first version of every decision (scope, split, plan, hypot
 
 ## Verification loop
 
-After implementing, run tests, typecheck and lint.
+After implementing, run tests, typecheck and lint through `mw-run`.
 
 - All green → done.
-- Red → read the actual error, fix the cause (never skip, delete or weaken a test, and never add ignore comments to make it pass), run again.
+- Red → read the actual error (if the compact output is not enough to diagnose it, rerun only that single failing test with full output), fix the cause (never skip, delete or weaken a test, and never add ignore comments to make it pass), run again.
 - Maximum 3 fix attempts. After the third failure, stop and report: what fails, what you tried, your best hypothesis.
 - If a check is red only because a `[human]` part is not written yet, do not work around it. Report which failures belong to it.
 
@@ -61,4 +62,4 @@ Next step: `mw-review` in a fresh session.
 
 ## Metrics
 
-`{"step":"build","ticket":"NNN","date":"<ISO date>","attempts":<verification runs>,"deviations":<count>,"result":"green|stopped"}`
+`{"step":"build","ticket":"NNN","date":"<ISO date>","mode":"think|ship","attempts":<verification runs>,"deviations":<count>,"result":"green|stopped"}`

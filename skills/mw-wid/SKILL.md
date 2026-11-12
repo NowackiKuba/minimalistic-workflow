@@ -50,5 +50,5 @@ tags: [mw, <repo-name>, <feature | bug>]
 - <a surprise during build, debug or review>
 
 ## Metrics
-<Numbers from metrics.jsonl, e.g. grill questions and rounds, commit count. "None" if there are none.>
+<Numbers from metrics.jsonl, e.g. mode, plan revisions, build attempts and deviations, review blockers. "None" if there are none.>
 ```
